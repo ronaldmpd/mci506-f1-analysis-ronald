@@ -220,3 +220,5 @@ __marimo__/
 __pycache__/
 data/cache/
 data/raw/
+.env
+*.ipynb
