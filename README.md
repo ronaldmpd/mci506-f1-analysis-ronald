@@ -82,6 +82,33 @@ Ejecutar:
 python scripts/load.py
 ```
 
+## Workflows y GitHub Actions
+
+El repositorio define un workflow en `.github/workflows/pipeline.yml` llamado `Extract and Load F1 Data`.
+
+### Triggers
+
+- `push`: se ejecuta en cada push al repositorio.
+- `workflow_dispatch`: permite ejecutar el pipeline manualmente desde la interfaz de GitHub.
+
+### Pasos de la acción
+
+1. `actions/checkout@v4` — extrae el código del repositorio.
+2. `actions/setup-python@v5` — instala Python 3.13.
+3. `actions/cache@v4` — cachea `data/cache` para acelerar descargas de FastF1.
+4. `pip install -r requirements.txt` — instala dependencias.
+5. `python scripts/extract.py` — extrae datos desde FastF1.
+6. `python scripts/load.py` — sube los `.parquet` generados a Google Cloud Storage.
+
+### Variables y secretos usados
+
+- `GCP_SA_KEY` debe estar definido en los Secrets de GitHub para poder subir los datos a GCS.
+- `DEV_MODE` se calcula automáticamente en el workflow según la rama: se activa cuando la rama no es `main`.
+
+### Cómo ejecutar manualmente
+
+En GitHub, ir a la pestaña `Actions`, seleccionar `Extract and Load F1 Data` y pulsar `Run workflow`.
+
 ## Modo desarrollo
 
 El proyecto detecta `DEV_MODE` si:
